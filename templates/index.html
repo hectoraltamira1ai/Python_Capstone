@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter Template - Backend Driven</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { width: 100vw; height: 100vh; overflow: hidden; font-family: system-ui, -apple-system, sans-serif; }
+        .grid-container { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); width: 100vw; height: 100vh; }
+        .box { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,.3); }
+        .box:nth-child(1) { background-color: #FF5733; }
+        .box:nth-child(2) { background-color: #2ECC71; }
+        .box:nth-child(3) { background-color: #2980B9; }
+        .box:nth-child(4) { background-color: #D4AC0D; }
+        .box:nth-child(5) { background-color: #8E44AD; }
+        .box:nth-child(6) { background-color: #16A085; }
+        .box:nth-child(7) { background-color: #E67E22; }
+        .box:nth-child(8) { background-color: #2C3E50; }
+        .box-counter { font-size: 5rem; font-weight: bold; line-height: 1; margin-bottom: .5rem; }
+        .box-target { font-size: 1.1rem; opacity: .9; }
+    </style>
+</head>
+<body>
+    <div class="grid-container" id="grid">
+        {% for _ in range(box_count) %}
+        <div class="box">
+            <div class="box-counter">0</div>
+            <div class="box-target">Max: {{ max_count }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        const counters = document.querySelectorAll('.box-counter');
+        const targets = document.querySelectorAll('.box-target');
+
+        async function refreshCounters() {
+            try {
+                const res = await fetch('/api/counters', { cache: 'no-store' });
+                const data = await res.json();
+
+                data.values.forEach((value, i) => {
+                    if (counters[i]) counters[i].innerText = value;
+                });
+
+                targets.forEach(t => t.innerText = `Max: ${data.max}`);
+            } catch (err) {
+                console.error('Counter fetch failed:', err);
+            }
+        }
+
+        refreshCounters();                 // initial paint
+        setInterval(refreshCounters, 1000); // live updates from Python
+    </script>
+</body>
+</html>
