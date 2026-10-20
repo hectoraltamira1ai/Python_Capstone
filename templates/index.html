@@ -19,17 +19,25 @@
         .box:nth-child(8) { background-color: #2C3E50; }
         .box-counter { font-size: 5rem; font-weight: bold; line-height: 1; margin-bottom: .5rem; }
         .box-target { font-size: 1.1rem; opacity: .9; }
+        .box-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
     </style>
 </head>
 <body>
     <div class="grid-container" id="grid">
-        {% for _ in range(box_count) %}
-        <div class="box">
-            <div class="box-counter">0</div>
-            <div class="box-target">Max: {{ max_count }}</div>
-        </div>
-        {% endfor %}
+    {% for _ in range(box_count) %}
+    <div class="box">
+        <div class="box-title">AI AGENT ACTIVATED</div>
+        <div class="box-counter">0</div>
+        <div class="box-target">Max: {{ max_count }}</div>
     </div>
+    {% endfor %}
+</div>
 
     <script>
         const counters = document.querySelectorAll('.box-counter');
